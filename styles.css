@@ -1,0 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+
+    background-image: url("./random-assets/cat-han-W_5Eakb1598-unsplash.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    /* background-color: #FF6813; */
+}
+
+#biggest-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-content-div {
+    width: 85%;
+    height: 75%;
+
+    position: relative;
+
+    margin: 5% 5%;
+}
+
+.title-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 4rem;
+    text-align: center;
+    color: #9d89fc;
+    
+    margin-bottom: 3%;
+}
+
+.tag-line {
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 1.28rem;
+    line-height: 1.5;
+    text-align: center;
+    color: #30e6b3;
+
+    margin-bottom: 4%;
+}
+
+table {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #9d89fc;
+
+    margin-bottom: 3%;
+}
+
+th {
+    text-align: center;
+
+    padding: 5px;
+
+    border: solid 3px #6d42df;
+
+}
+
+td {
+    text-align: center;
+    border: solid 3px #6d42df;
+
+
+}
+
+.counter {
+    color: white;
+}
+
+.reset-btn {
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    /* this is to give the letters an outline */
+    text-shadow: -1px -1px 0 #142664, 
+        1px -1px 0 #142664, 
+        -1px 1px 0 #142664, 
+        1px 1px 0 #142664;
+
+    width: 15rem;
+
+
+    background: linear-gradient(45deg, #6d42df, #30e6b3);
+    mask-composite: exclude;
+    /* this styling is to set up the slide effect upon hover */
+    box-shadow: inset 0 0 0 0 #9d89fc;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+
+    margin-bottom: 1%;
+}
+
+.reset-btn:hover {
+    /* button aperture+gradient effect */
+    box-shadow: inset 0 0 0 50px #6d42df;
+    color: #30e6b3;
+}
+
+#cards-container-div {
+    width: 100%;
+    height: 85%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    padding: 15px;
+
+    background-color: ghostwhite;
+
+    border: solid 3px black;
+}
+
+.card {
+    border: 1px solid black;
+    width: 250px;
+    height: 230px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.congrats-screen {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Orbitron', sans-serif;
+    color: #6d42df;
+    /* this is to give the letters an outline */
+    text-shadow: -1px -1px 0 white, 
+        1px -1px 0 white, 
+        -1px 1px 0 white, 
+        1px 1px 0 white;
+    letter-spacing: 3px;
+
+
+    background-image: url("./random-assets/jason-leung-Xaanw0s0pMk-unsplash.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+
+  
+}
+
+.congrats-message {
+    text-align: center;
+    font-size: 8rem;
+    margin-bottom: 1%;
+
+   
+}
+
+.congrats-subtext {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.close-congrats-screen-btn {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+
+    width: 4rem;
+    height: 4rem;
+
+    /* font-family: 'Orbitron', sans-serif; */
+    font-size: 2.5rem;
+    font-weight: bold;
+
+    color: #fc9457;
+    background-color: #6d42df;
+    border: solid 5px #fc9457;
+}
+
+footer {
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 1.2rem;
+    color: #9d89fc;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+}
+
+a {
+    color: #30e6b3;
+    text-decoration: none;
+}
+
+
+/* .card-back .clicked {
+    display: hidden;
+}          */
+
+
+/* after adjusting to switch srcs from front to back, try refactor things so that instead of switching src attributes, you have 2 absolutely positioned elements stacked and toggle a display: hidden property */
