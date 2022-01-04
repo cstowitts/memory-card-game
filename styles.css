@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 10px;
+}
+
 body {
     height: 100%;
 
@@ -41,7 +45,7 @@ body {
 .title {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    font-size: 4rem;
+    font-size: 5rem;
     text-align: center;
     color: #9d89fc;
     
@@ -50,7 +54,7 @@ body {
 
 .tag-line {
     font-family: 'Ubuntu Mono', monospace;
-    font-size: 1.28rem;
+    font-size: 1.5rem;
     line-height: 1.5;
     text-align: center;
     color: #30e6b3;
@@ -140,6 +144,10 @@ td {
     display: inline-block;
 }
 
+.hide {
+    display: none;
+}
+
 .congrats-screen {
     position: absolute;
 
@@ -198,6 +206,8 @@ td {
     border: solid 5px #fc9457;
 }
 
+
+
 footer {
     font-family: 'Ubuntu Mono', monospace;
     font-size: 1.2rem;
@@ -207,7 +217,6 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
 }
 
 a {
@@ -215,10 +224,30 @@ a {
     text-decoration: none;
 }
 
+@media only screen and (max-width: 480px) {
+    .title {
+        font-size: 3rem;
+    }
 
-/* .card-back .clicked {
-    display: hidden;
-}          */
+    .tag-line {
+        font-size: 1.25rem;
+    }
+
+    .game-content-div {
+        width: 95%;
+    }
+
+    #cards-container-div {
+        padding: 5px 10px;
+    }
+
+    .card {
+        width: 150px;
+        height: 138px;
+        margin: 2px;
+    }
 
 
-/* after adjusting to switch srcs from front to back, try refactor things so that instead of switching src attributes, you have 2 absolutely positioned elements stacked and toggle a display: hidden property */
+
+
+}

@@ -42,7 +42,16 @@ let matchesMade = 0;
 const gamesWon = [];
 
 const resetButton = document.querySelector(".reset-btn");
+
+const congratsDiv = document.querySelector(".congrats-container");
 const closeCongratsBtn = document.querySelector(".close-congrats-screen-btn");
+
+//this variable refers to the screen size based on whether the size of the user's screen on load falls within the parameters of the media query in our CSS stylesheet
+let isMobile = window.matchMedia("(max-width: 480px)").matches;
+
+//this variable determines whether the type of event for all our addEventListeners is going to be click or dblclick depending on whether they are on a mobile screen or not
+let eventType = isMobile ? "dblclick" : "click";
+
 
 // HELPER FUNCTIONS
 
@@ -108,7 +117,7 @@ function createCards(shuffledCards) {
         // console.log("I've appended the cardImg to the cardContentDiv!", i);
 
         //add event listener that will trigger flipCard func on click
-        cardContentDiv.addEventListener("click", handleCardClick);
+        cardContentDiv.addEventListener(eventType, handleCardClick);
         //if we add the eventListener after we append createdCard, the eventListener won't be appended to the DOM 
 
         //append created card (cardContentDiv) to cards container div (gameBoard) on DOM 
@@ -117,6 +126,14 @@ function createCards(shuffledCards) {
         //we don't need to return gameBoard because the appended elements show up on the page without returning gameBoard or a page refresh
     }
 
+}
+
+//handle clicking on a card: could be 1st or 2nd card
+function handleCardClick(event) {
+    //we don't want the user to be able to click more than 2 cards at a time. only fire if there are 0 or 1 cards clicked, if two cards are clicked, the clickedCardsIds array length will be 2
+    if (clickedCardsIds.length < 2) {
+        flipCard(event.target);
+    };
 }
 
 //because of hoisting, we can call this function above, before it's created. This only works if the func isn't a func expression with an = (basically saving a func to a variable). Otherwise it'll say error: cannot call func before initialization
@@ -151,12 +168,15 @@ function flipCard(card) {
 
     //once 2 cards are clicked (aka there's 2 ids in the clickedCardsIds array), fire the doTheyMatch fun to check for a match after waiting .5 secs
     if (clickedCardsIds.length === 2) {
-        setTimeout(doTheyMatch, 500);
+        // check if they match areMatching = true/false (based on do they match func)
+        //if true, setTimeout checkForWin, if false, setTimeout unFlipCard (cards have to stay face up for 1 sec)
+        setTimeout(doTheyMatch, 250);
     }
 
 }
 
 //this func checks if the two cards are matching gifs
+//this func name sounds like it should return a boolean, in the future have it return a boolean and wherever this is called can work with that boolean value. It would be better if it didn't expressly do anything with the boolean within this func--that can be the job of whatever funcs call it. It'll make it a more flexible and reusable func that way.
 function doTheyMatch() {
     let firstCardId = clickedCardsIds[0];
     let secondCardId = clickedCardsIds[1];
@@ -210,8 +230,8 @@ function unFlipCard(firstCardId, secondCardId) {
 function checkForWin() {
     //if the number of matched pairs is = to the length of the card deck divided by 2, user has won
     if(matchesMade === shuffledCards.length / 2){
-        //let em know
-        alert("You won!");
+        //toggle the display:none property on the congrats screen and button for the winner
+        congratsDiv.style.display = "block";
 
         //reset matchesMade variable for the new game
         matchesMade = 0;
@@ -239,21 +259,24 @@ function startNewGame() {
     createCards(shuffledCards);
 }
 
+//this func makes the congrats screen and button disappear (using display: none) when the button on the congrats screen is clicked
+function hideCongrats(){
+    // closeCongratsBtn.style.display = "none";
+    congratsDiv.style.display = "none";
+
+}
+
+//
 
 //EVENT LISTENERS
 
-//handle clicking on a card: could be 1st or 2nd card
-function handleCardClick(event) {
-    //we don't want the user to be able to click more than 2 cards at a time. only fire if there are 0 or 1 cards clicked, if two cards are clicked, the clickedCardsIds array length will be 2
-    if (clickedCardsIds.length < 2) {
-        flipCard(event.target);
-    };
-}
-
 //when the reset button is clicked, call startNewGame func
-resetButton.addEventListener("click", startNewGame)
+resetButton.addEventListener(eventType, startNewGame);
 
-//when the button on the congrats screen is clicked, make the congrats screen and button disappear
+//adds an event listener on the button on the congrats screen to close it
+closeCongratsBtn.addEventListener(eventType, hideCongrats);
+
+
 
 
 
