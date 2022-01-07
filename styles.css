@@ -45,7 +45,7 @@ body {
 .title {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    font-size: 5rem;
+    font-size: 6rem;
     text-align: center;
     color: #9d89fc;
     
@@ -54,7 +54,7 @@ body {
 
 .tag-line {
     font-family: 'Ubuntu Mono', monospace;
-    font-size: 1.5rem;
+    font-size: 2rem;
     line-height: 1.5;
     text-align: center;
     color: #30e6b3;
@@ -64,7 +64,7 @@ body {
 
 table {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     color: #9d89fc;
 
     margin-bottom: 3%;
@@ -73,7 +73,7 @@ table {
 th {
     text-align: center;
 
-    padding: 5px;
+    padding: 1rem;
 
     border: solid 3px #6d42df;
 
@@ -93,15 +93,13 @@ td {
 .reset-btn {
     color: white;
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 2rem;
     letter-spacing: 3px;
     /* this is to give the letters an outline */
     text-shadow: -1px -1px 0 #142664, 
         1px -1px 0 #142664, 
         -1px 1px 0 #142664, 
         1px 1px 0 #142664;
-
-    width: 15rem;
 
 
     background: linear-gradient(45deg, #6d42df, #30e6b3);
@@ -113,6 +111,7 @@ td {
     transition: ease-out 0.4s;
 
     margin-bottom: 1%;
+    padding: .5rem .5rem;
 }
 
 .reset-btn:hover {
@@ -233,6 +232,27 @@ a {
         font-size: 1.25rem;
     }
 
+    .reset-btn {
+        font-size: 1.5rem;
+        padding: 2px;
+
+    }
+
+    table {
+        font-size: 1.25rem;
+    }
+
+    th {
+        padding: 5px;
+        border: solid 2px #6d42df;
+
+    }
+
+    td {
+        border: solid 2px #6d42df;
+
+    }
+
     .game-content-div {
         width: 95%;
     }
@@ -247,7 +267,7 @@ a {
         margin: 2px;
     }
 
-
+    
 
 
 }

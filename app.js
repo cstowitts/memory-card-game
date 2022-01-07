@@ -73,29 +73,6 @@ function createCards(shuffledCards) {
     //like the meme container div, we are going to create each card img and append it into the #game div
 
     for (let i = 0; i < shuffledCards.length; i++) {
-        // let cardObj = shuffledCards[i];
-
-        //don't need to do the following commented code yet until we aren't swapping img srcs anymore
-        // //create card container div (to hold the cardFront gif img and the cardBack gif img) and add a class
-        // const cardContentDiv = document.createElement('div');
-        // cardContentDiv.classList.add("card-content-div");
-
-        //(later we'll put this inside cardContentDiv
-        //create the cardFrontImg element 
-        //set cardFrontImg src to the src value in each card's obj (flip will be controlled by css display: hidden +toggle)
-        // cardFrontImg.setAttribute("src", "./random-assets/mem-card-back-design.png");
-        //add a data-idx attribute on each card's front img that is specific to that card's index in the shuffledCards array 
-        //cardFrontImg.setAttribute("data-idx", i);
-        //add class to differentiate from back img
-        //cardFrontImg.classList.add("card-front");
-        // //create the cardBackImg element to put inside cardContentDiv
-        // const cardBackImg = document.createElement('img');
-        // //set cardBackImg src to confused math lady gif
-        // cardBackImg.setAttribute("src", "./mem-card-assets/confused-lady-gif");
-        // //add class to differentiate from front img
-        // cardBackImg.classList.add("card-back");
-        // //append cardBackImg to cardContentDiv
-        // cardContentDiv.append(cardBackImg);
 
         //create card container div (to hold the cardImg and add a class
         const cardContentDiv = document.createElement('div');
@@ -112,14 +89,12 @@ function createCards(shuffledCards) {
         //add a data-idx attribute on each card that is specific to that card's index in the shuffledCards array 
         cardImg.setAttribute("data-idx", i);
 
+        //add event listener that will trigger flipCard func on click TO THE IMG to prevent bubbling
+        cardImg.addEventListener(eventType, handleCardClick);
+
         //append cardImg to cardContentDiv
         cardContentDiv.append(cardImg);
-        // console.log("I've appended the cardImg to the cardContentDiv!", i);
-
-        //add event listener that will trigger flipCard func on click
-        cardContentDiv.addEventListener(eventType, handleCardClick);
-        //if we add the eventListener after we append createdCard, the eventListener won't be appended to the DOM 
-
+    
         //append created card (cardContentDiv) to cards container div (gameBoard) on DOM 
         gameBoard.append(cardContentDiv);
 
@@ -130,8 +105,13 @@ function createCards(shuffledCards) {
 
 //handle clicking on a card: could be 1st or 2nd card
 function handleCardClick(event) {
-    //we don't want the user to be able to click more than 2 cards at a time. only fire if there are 0 or 1 cards clicked, if two cards are clicked, the clickedCardsIds array length will be 2
-    if (clickedCardsIds.length < 2) {
+
+    // console.log("event target :", event.target);
+    // console.log("event current target :", event.currentTarget);
+    // console.log("event target = current target?:", event.target === event.currentTarget);
+
+    //we don't want the user to be able to click more than 2 cards at a time. only fire if there are 0 or 1 cards clicked, if two cards are clicked, the clickedCardsIds array length will be 2. We also need to check that the idx of the clicked card isn't already in clickedCardsIds--we don't want multiclicks to work!
+    if (clickedCardsIds.length < 2 && !clickedCardsIds.includes(event.target.dataset.idx) && !event.target.classList.contains("matched")) {
         flipCard(event.target);
     };
 }
@@ -140,7 +120,6 @@ function handleCardClick(event) {
 
 //this func flips a clicked card face-up (toggles cardBackImg overlay to display: hidden) we are first going to swap the img src from the cardBack src to the gif img src 
 function flipCard(card) {
-    // card.classList.toggle("clicked"); trying to hide the cardBackImg only
 
     //track the click, increment clickCounter 
     clickCounter++;
@@ -155,16 +134,18 @@ function flipCard(card) {
     let cardImgSrc = shuffledCards[selected].src;
 
     //save the clicked card's name to the variable 'cardName'
-    let cardName = shuffledCards[selected].src;
+    let cardName = shuffledCards[selected].name;
 
     //change the card img by switching its src with the correct src associated with its position in the shuffledCards array
     card.setAttribute("src", cardImgSrc);
 
     //push the clicked card's name property value into the clickedCardsImgs array
     clickedCardsNames.push(cardName);
+    console.log("card names: ", clickedCardsNames);
 
     //push clicked card's id (saved in 'selected') into the clickedCardsIds array
     clickedCardsIds.push(selected);
+    console.log("card ids: ", clickedCardsIds);
 
     //once 2 cards are clicked (aka there's 2 ids in the clickedCardsIds array), fire the doTheyMatch fun to check for a match after waiting .5 secs
     if (clickedCardsIds.length === 2) {
@@ -178,15 +159,19 @@ function flipCard(card) {
 //this func checks if the two cards are matching gifs
 //this func name sounds like it should return a boolean, in the future have it return a boolean and wherever this is called can work with that boolean value. It would be better if it didn't expressly do anything with the boolean within this func--that can be the job of whatever funcs call it. It'll make it a more flexible and reusable func that way.
 function doTheyMatch() {
-    let firstCardId = clickedCardsIds[0];
-    let secondCardId = clickedCardsIds[1];
+    let firstCard = getSelectedCardsEls()[0];
+    let secondCard = getSelectedCardsEls()[1];
     let firstCardName = clickedCardsNames[0];
     let secondCardName = clickedCardsNames[1];
 
     //if the names in the clickedCardsNames array match AND they DON'T have the same idx (aka the user didn't click the same card twice), the cards are a match
-    if (firstCardName === secondCardName && firstCardId !== secondCardId) {
+    if (firstCardName === secondCardName && firstCard.dataset.idx !== secondCard.dataset.idx) {
         //increment matchesMade
         matchesMade += 1;
+
+        //add the matched class to prevent the matched cards from being clicked on again once they've matched
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
 
         //check to see if the user has won
         checkForWin();
@@ -200,8 +185,9 @@ function doTheyMatch() {
        
         //let the unmatching cards show for 1 sec and then flip them face-down
         setTimeout(function() {
-            unFlipCard(firstCardId, secondCardId);
-            //bc these don't scope to the unFlipCard func, we pass them in as arguments and replace them with cardOneId and cardTwoId
+            unFlipCard();
+            //originally needed the ids of the two flipped cards as arguments
+            //doesn't need arguments of the cards' ids anymore bc they're in the global scope in the array clickedCardsIds
 
         }, 1000); //wait one second before calling unFlipCard
 
@@ -211,11 +197,11 @@ function doTheyMatch() {
 }
 
 //BE CAREFUL!! the setTimeout wouldn't work because we accidentally named the function below "unflipCard" instead of "unFlipCard"<<<CAMELCASING, DO YOU KNOW IT??
-function unFlipCard(firstCardId, secondCardId) {
+function unFlipCard() {
 
-    //select the elements of the clicked cards by accessing their unique idx attribute 
-    let firstCard = document.querySelector(`[data-idx = '${firstCardId}']`);
-    let secondCard = document.querySelector(`[data-idx = '${secondCardId}']`);
+    //select the elements of the clicked cards using the getSelectedCardsEls() 
+    let firstCard = getSelectedCardsEls()[0];
+    let secondCard = getSelectedCardsEls()[1];
 
     //and replace the img src attributes for both cards to the card back design
     firstCard.setAttribute("src", cardBackDesign);
@@ -266,7 +252,18 @@ function hideCongrats(){
 
 }
 
-//
+//this func taps into clickedCardsIds, uses the data-idx of each card to querySelect each element/card and returns an array of the actual elements. We don't wanna have to keep using document.querySelector(`[data-idx = '${firstCardId}']`)
+function getSelectedCardsEls () {
+    //tap into the clickedCardsIds to get the unique ids of the first card and the second card
+    let firstCardId = clickedCardsIds[0];
+    let secondCardId = clickedCardsIds[1];
+
+    //using the ids of the clicked cards, select those card elements through the data-idx attribute 
+    let firstCard = document.querySelector(`[data-idx = '${firstCardId}']`);
+    let secondCard = document.querySelector(`[data-idx = '${secondCardId}']`);
+
+    return [firstCard, secondCard];
+}
 
 //EVENT LISTENERS
 
@@ -274,7 +271,7 @@ function hideCongrats(){
 resetButton.addEventListener(eventType, startNewGame);
 
 //adds an event listener on the button on the congrats screen to close it
-closeCongratsBtn.addEventListener(eventType, hideCongrats);
+closeCongratsBtn.addEventListener("click", hideCongrats);
 
 
 
@@ -286,3 +283,4 @@ createCards(shuffledCards);
 
 
 
+//consider changing the absolutely positioned div congrats screen to a modal in a container div that grays out the stuff behind the popup/modal
